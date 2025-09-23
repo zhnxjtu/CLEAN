@@ -24,11 +24,11 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch --nproc_
 ```
 (The measurement results are saved in "/tools/measure_doc/". Here, we provide the measurement result for SECOND.)
 
-### Step 3: Distillation (PV-RCNN & SECOND-x0.75 as example, on 4 GPUs)
+### Step 3: Distillation (Voxel-RCNN & SECOND-x0.4 as example, on 4 GPUs)
 ```
-CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --master_port 18891 --nproc_per_node=4 train.py --cfg_file cfgs/kitti_cakdp/second-pv-x0.75.yaml --launcher pytorch --extra_tag pv-second-x0.75
+CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node 4 --master_port 18881 train_with_pruning.py --launcher pytorch --cfg_file cfgs/kitti_CLEAN/second-voxel-x0.40.yaml --extra_tag voxel-second-x0.4
 ```
-Please modify the "cif_file" and "extra_tag" to get results for other models.
+Please modify the "cfg_file" and "extra_tag" to get results for other models. **For experiments on Waymo Open Dataset (ResNet-based backbone), please change "train_with_pruning.py" to "train_with_pruning_res.py".**
 
 ###  Test without pruning
 Please modify following "cif_file" and "model" first.
@@ -39,6 +39,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --master_port 18
 ```
 CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --master_port 18891 --nproc_per_node=4 test_with_pruning.py --cfg_file {#cfg_file} --ckpt {#model} --launcher pytorch
 ```
+**For experiments on Waymo Open Dataset (ResNet-based backbone), please change "test_with_pruning.py" to "test_with_pruning_res.py".**
 
 ## Calculate Efficiency Metrics
 Please refer to [SparseKD](https://github.com/CVMI-Lab/SparseKD/blob/master/docs/GETTING_STARTED.md).
